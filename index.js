@@ -4,6 +4,9 @@ import express from 'express'
 // graphqlExpress 查询时需要的 middleware 分析 body 内容
 import bodyParser from 'body-parser'
 
+// 跨域请求
+import cors from 'cors'
+
 import {
   graphqlExpress, // graphql middleware
   graphiqlExpress, // 开发工具的 middleware
@@ -26,7 +29,10 @@ const schema = makeExecutableSchema({
   resolvers,
 })
 
-const app = express()
+// 跨域测试
+const app = express().use('*', cors({ origin:true, credentials: true }))
+
+// const app = express()
 
 // 利用 graphql-server 提供的中间件来生成两个路由
 app.use(CONFIG.graphqlEndpointUrl, bodyParser.json(), graphqlExpress({ schema }))
